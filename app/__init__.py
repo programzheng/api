@@ -1,8 +1,7 @@
-
 from models import db, migrate
-from flask import Flask
-import os
+from flask import Flask, request
 from config import config
+from services.auth_service import create_user
 
 app = Flask(__name__)
 
@@ -16,6 +15,6 @@ db.init_app(app)
 migrate.init_app(app, db)
 
 
-@app.route('/')
-def index():
-    return config.get("DB_HOST")
+@app.route('/auth/register', methods=['POST'])
+def register():
+    create_user(request.json.get('username'), request.json.get('password'))
